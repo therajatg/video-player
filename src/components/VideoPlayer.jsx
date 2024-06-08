@@ -61,7 +61,7 @@ const VideoPlayerWithComments = () => {
               value={currentComment}
               onChange={(e) => setCurrentComment(e.target.value)}
               placeholder="Add a comment"
-              className="w-full py-2 rounded-md"
+              className="w-full p-2 rounded-md"
             />
             <button onClick={addComment}>Add Comment</button>
           </div>
