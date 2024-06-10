@@ -128,6 +128,7 @@ const VideoPlayerWithComments = () => {
           )}
 
           <motion.div
+            drag
             className="w-[300px] absolute"
             style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
           >
