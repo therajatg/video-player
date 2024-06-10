@@ -2,6 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "BebasNeue-Regular";
+  src: local("BebasNeue-Regular"),
+    url("./assets/fonts/BebasNeue-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Danfo-Regular";
+  src: local("Danfo-Regular"),
+    url("./assets/fonts/Danfo-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "DMSerifText-Italic";
+  src: local("DMSerifText-Italic"),
+    url("./assets/fonts/DMSerifText-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "DMSerifText-Regular";
+  src: local("DMSerifText-Regular"),
+    url("./assets/fonts/DMSerifText-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gwendolyn-Bold";
+  src: local("Gwendolyn-Bold"),
+    url("./assets/fonts/Gwendolyn-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gwendolyn-Regular";
+  src: local("Gwendolyn-Regular"),
+    url("./assets/fonts/Gwendolyn-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Jacquard12-Regular";
+  src: local("Jacquard12-Regular"),
+    url("./assets/fonts/Jacquard12-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "JosefinSans-Bold";
+  src: local("JosefinSans-Bold"),
+    url("./assets/fonts/JosefinSans-Bold.ttf") format("truetype");
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
