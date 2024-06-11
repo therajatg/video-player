@@ -16,6 +16,7 @@ export const VideoPlayer = () => {
   const [clickLocation, setClickLocation] = useState(null);
   const [isVideoClicked, setIsVideoClicked] = useState(false);
   const [text, setText] = useState("");
+  const [position, setPosition] = useState(null);
 
   const fontFamilies = [
     { name: "BebasNeue-Regular", value: "font-BebasNeueRegular" },
@@ -58,6 +59,29 @@ export const VideoPlayer = () => {
     }
   }, [selectedFont.size]);
 
+  console.log(position);
+
+  useEffect(() => {
+    const updatePosition = () => {
+      if (videoRef.current) {
+        const rect = videoRef.current.getBoundingClientRect();
+        setPosition({
+          top: rect.top,
+          bottom: rect.bottom,
+          left: rect.left,
+          right: rect.right,
+        });
+      }
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [videoUrl]);
+
   const handleVideoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -83,6 +107,40 @@ export const VideoPlayer = () => {
     setText(event.target.value);
     textAreaRef.current.style.height = `${scrollHeight}px`;
   };
+
+  // const handleDrag = (event, info) => {
+  //   const videoRect = videoRef.current.getBoundingClientRect();
+  //   const videoLeft = videoRect.left;
+  //   const videoTop = videoRect.top;
+  //   const videoRight = videoRect.right;
+  //   const videoBottom = videoRect.bottom;
+
+  //   const textareaRect = event.target.getBoundingClientRect();
+  //   const textareaLeft = textareaRect.left;
+  //   const textareaTop = textareaRect.top;
+  //   const textareaRight = textareaRect.right;
+  //   const textareaBottom = textareaRect.bottom;
+
+  //   // Calculate the boundaries
+  //   const leftBoundary = videoLeft;
+  //   const topBoundary = videoTop;
+  //   const rightBoundary = videoRight - textareaRect.width;
+  //   const bottomBoundary = videoBottom - textareaRect.height;
+
+  //   // Prevent the textarea from going out of bounds
+  //   if (info.point.x < leftBoundary) {
+  //     info.point.x = leftBoundary;
+  //   }
+  //   if (info.point.x > rightBoundary) {
+  //     info.point.x = rightBoundary;
+  //   }
+  //   if (info.point.y < topBoundary) {
+  //     info.point.y = topBoundary;
+  //   }
+  //   if (info.point.y > bottomBoundary) {
+  //     info.point.y = bottomBoundary;
+  //   }
+  // };
 
   return (
     <div className="mt-8 w-full flex flex-col items-center">
@@ -160,8 +218,10 @@ export const VideoPlayer = () => {
             onClick={handleVideoClick}
             // onContextMenu={handleContextMenu}
           />
-          {isVideoClicked && (
+          {isVideoClicked && position && (
             <motion.textarea
+              drag
+              dragConstraints={videoRef}
               className={`absolute bg-transparent ${selectedFont.color} ${selectedFont.family} ${selectedFont.size} w-auto`}
               style={{
                 top: `${clickLocation.y}px`,
