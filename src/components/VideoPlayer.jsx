@@ -71,6 +71,7 @@ export const VideoPlayer = () => {
   const handleSelectedFont = (e) => {
     const { name, value } = e.target;
     setSelectedFont({ ...selectedFont, [name]: value });
+    textAreaRef.current.style.height = `${scrollHeight}px`;
   };
 
   const handleChange = (event) => {
