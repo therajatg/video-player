@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export const VideoPlayer = () => {
@@ -52,6 +52,12 @@ export const VideoPlayer = () => {
     { name: "60px", value: "text-6xl" },
   ];
 
+  useEffect(() => {
+    if (text) {
+      textAreaRef.current.style.height = `${textAreaRef?.current?.scrollHeight}px`;
+    }
+  }, [selectedFont.size]);
+
   const handleVideoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -63,7 +69,6 @@ export const VideoPlayer = () => {
   const handleVideoClick = (e) => {
     e.preventDefault();
     const { pageX, pageY } = e;
-    console.log(e);
     setClickLocation({ x: pageX, y: pageY });
     setIsVideoClicked(true);
   };
@@ -71,13 +76,12 @@ export const VideoPlayer = () => {
   const handleSelectedFont = (e) => {
     const { name, value } = e.target;
     setSelectedFont({ ...selectedFont, [name]: value });
-    textAreaRef.current.style.height = `${scrollHeight}px`;
   };
 
   const handleChange = (event) => {
     const { scrollHeight } = textAreaRef.current;
-    textAreaRef.current.style.height = `${scrollHeight}px`;
     setText(event.target.value);
+    textAreaRef.current.style.height = `${scrollHeight}px`;
   };
 
   return (
