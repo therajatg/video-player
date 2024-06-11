@@ -1,4 +1,6 @@
-import VideoPlayerWithComments from "./components/VideoPlayer";
+// import Card from "./components/Card";
+// import Test from "./components/Text";
+import { VideoPlayer } from "./components/VideoPlayer";
 
 function App() {
   return (
@@ -6,7 +8,9 @@ function App() {
       <h1 className="font-bold text-6xl bg-gradient-to-r from-fromTextColor to-toTextColor bg-clip-text text-transparent font-DanfoRegular">
         Awesome Video Player
       </h1>
-      <VideoPlayerWithComments />
+      <VideoPlayer />
+      {/* <Test /> */}
+      {/* <Card /> */}
     </div>
   );
 }

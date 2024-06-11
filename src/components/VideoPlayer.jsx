@@ -1,17 +1,21 @@
 import React, { useState, useRef } from "react";
-import { VideoContextMenu } from "./VideoContextMenu";
 import { motion } from "framer-motion";
 
-const VideoPlayerWithComments = () => {
+export const VideoPlayer = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
-  const [comments, setComments] = useState([]);
-  const [currentComment, setCurrentComment] = useState("");
-  const [currentTime, setCurrentTime] = useState(0);
   const videoRef = useRef(null);
+  const textAreaRef = useRef(null);
 
-  const [selectedFont, setSelectedFont] = useState("BebasNeue-Regular");
-  const [contextMenu, setContextMenu] = useState({ show: false });
+  const [selectedFont, setSelectedFont] = useState({
+    family: "font-BebasNeueRegular",
+    color: "text-black",
+    size: "text-base",
+  });
+
+  const [clickLocation, setClickLocation] = useState(null);
+  const [isVideoClicked, setIsVideoClicked] = useState(false);
+  const [text, setText] = useState("");
 
   const fontFamilies = [
     { name: "BebasNeue-Regular", value: "font-BebasNeueRegular" },
@@ -24,6 +28,30 @@ const VideoPlayerWithComments = () => {
     { name: "JosefinSans-Bold", value: "font-JosefinSansBold" },
   ];
 
+  const fontColors = [
+    { name: "Black", value: "text-black" },
+    { name: "White", value: "text-white" },
+    { name: "Red", value: "text-red-500" },
+    { name: "Blue", value: "text-blue-500" },
+    { name: "Green", value: "text-green-500" },
+    { name: "Yellow", value: "text-yellow-500" },
+    { name: "Purple", value: "text-purple-500" },
+    { name: "Orange", value: "text-orange-500" },
+  ];
+
+  const fontSizes = [
+    { name: "12px", value: "text-xs" },
+    { name: "14px", value: "text-sm" },
+    { name: "16px", value: "text-base" },
+    { name: "18px", value: "text-lg" },
+    { name: "20px", value: "text-xl" },
+    { name: "24px", value: "text-2xl" },
+    { name: "30px", value: "text-3xl" },
+    { name: "36px", value: "text-4xl" },
+    { name: "48px", value: "text-5xl" },
+    { name: "60px", value: "text-6xl" },
+  ];
+
   const handleVideoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -32,75 +60,86 @@ const VideoPlayerWithComments = () => {
     }
   };
 
-  const addComment = () => {
-    setComments([...comments, { time: currentTime, text: currentComment }]);
-    setCurrentComment("");
-    setContextMenu((prev) => {
-      return { ...prev, show: false };
-    });
+  const handleVideoClick = (e) => {
+    e.preventDefault();
+    const { pageX, pageY } = e;
+    console.log(e);
+    setClickLocation({ x: pageX, y: pageY });
+    setIsVideoClicked(true);
   };
 
-  const handleTimeUpdate = () => {
-    setCurrentTime(videoRef.current.currentTime);
+  const handleSelectedFont = (e) => {
+    const { name, value } = e.target;
+    setSelectedFont({ ...selectedFont, [name]: value });
   };
 
-  const getCommentsForCurrentTime = () => {
-    return comments
-      .filter((comment) => {
-        if (Math.floor(comment.time) === Math.floor(currentTime)) {
-          console.log(comment);
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .map((comment, index) => (
-        <p
-          key={index}
-          className={`bg-neutral-700 p-[10px] rounded-[5px] my-[5px] ${selectedFont}`}
-        >
-          {comment.text}
-        </p>
-      ));
-  };
-
-  const handleContextMenu = (event) => {
-    event.preventDefault();
-    const { pageX, pageY } = event;
-    setContextMenu({
-      show: true,
-      x: pageX,
-      y: pageY,
-    });
+  const handleChange = (event) => {
+    const { scrollHeight } = textAreaRef.current;
+    textAreaRef.current.style.height = `${scrollHeight}px`;
+    setText(event.target.value);
   };
 
   return (
     <div className="mt-8 w-full flex flex-col items-center">
-      <div className="flex justify-between items-center">
+      <div className="w-[600px] flex flex-col justify-center items-center">
         <input
           type="file"
           accept="video/*"
           onChange={handleVideoUpload}
           className="my-8"
         />
-        <div>
-          <label for="fonts" className="mr-4 font-bold text-xl">
-            Select Font:
-          </label>
-          <select
-            name="fonts"
-            id="fonts"
-            className="p-2 rounded-md"
-            onChange={(e) => {
-              setSelectedFont(e.target.value);
-            }}
-          >
-            {fontFamilies.map((item) => (
-              <option value={item.value} key={item.value}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+        <div className="w-full flex justify-between mb-12">
+          <div className="flex flex-col">
+            <label htmlFor="family" className="font-semibold text-lg">
+              Font Family:
+            </label>
+            <select
+              name="family"
+              id="family"
+              className="p-2 rounded-md"
+              onChange={handleSelectedFont}
+            >
+              {fontFamilies.map((item) => (
+                <option value={item.value} key={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="color" className="font-semibold text-lg">
+              Font Color:
+            </label>
+            <select
+              name="color"
+              id="color"
+              className="p-2 rounded-md"
+              onChange={handleSelectedFont}
+            >
+              {fontColors.map((item) => (
+                <option value={item.value} key={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="fonts" className="font-semibold text-lg">
+              Font Size:
+            </label>
+            <select
+              name="size"
+              id="size"
+              className="p-2 rounded-md"
+              onChange={handleSelectedFont}
+            >
+              {fontSizes.map((item) => (
+                <option value={item.value} key={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -111,33 +150,25 @@ const VideoPlayerWithComments = () => {
             controls
             width="600"
             src={videoUrl}
-            onTimeUpdate={handleTimeUpdate}
+            // onTimeUpdate={handleTimeUpdate}
             className="-z-1"
-            onContextMenu={handleContextMenu}
+            onClick={handleVideoClick}
+            // onContextMenu={handleContextMenu}
           />
-          {contextMenu.show && (
-            <VideoContextMenu
-              contextMenu={contextMenu}
-              setContextMenu={setContextMenu}
-              currentComment={currentComment}
-              setCurrentComment={setCurrentComment}
-              selectedFont={selectedFont}
-              addComment={addComment}
-              comments={comments}
+          {isVideoClicked && (
+            <motion.textarea
+              className={`absolute bg-transparent ${selectedFont.color} ${selectedFont.family} ${selectedFont.size} w-auto`}
+              style={{
+                top: `${clickLocation.y}px`,
+                left: `${clickLocation.x}px`,
+              }}
+              ref={textAreaRef}
+              value={text}
+              onChange={handleChange}
             />
           )}
-
-          <motion.div
-            drag
-            className="w-[300px] absolute"
-            style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
-          >
-            {getCommentsForCurrentTime()}
-          </motion.div>
         </div>
       )}
     </div>
   );
 };
-
-export default VideoPlayerWithComments;
